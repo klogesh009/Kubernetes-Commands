@@ -1,0 +1,14 @@
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+k -n kubernetes-dashboard get svc
+kubectl -n kubernetes-dashboard edit svc kubernetes-dashboard 
+find the services type and change the clusterIP to loadbalancer and then save it
+kubectl -n kubernetes-dashboard get svc
+
+How to get access to login kubernetes dashboard
+kubectl create serviceaccount dashboard -n default
+kubectl create clusterrolebinding dashboard-admin -n default  --clusterrole=cluster-admin  --serviceaccount=default:dashboard
+It adds clusetr binding rules to your dashboard
+
+kubectl get secret $(kubectl get serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
+
+copy the secret key and copy it to the dashboard
